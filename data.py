@@ -22,7 +22,7 @@ def process_corpus(filename):
     temp = np.empty((file.shape[0], 3), dtype=file.dtype)
     temp[:, 0] = file[:, 0]
     for i, sentence in enumerate(file[:, 1]):
-        word_list = sentence.lower().split()
+        word_list = sentence.split()
         normal_text = []
         hashtag_and_mentions = []
         for word in word_list:
