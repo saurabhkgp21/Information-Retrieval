@@ -15,8 +15,9 @@ def lookup_tweets(tweet_IDs, api):
 					api.statuses_lookup(id_=tweet_IDs[i * 100:end_loc])
 				)
 			except:
+				print("Error occured at i={}".format(i))
 				pass
-			if i!=0 and i%10 == 0:
+			if i!=0 and i%500 == 0:
 				print("{}/{} tweets retrieved, time elapsed: {}".format(i*100, tweet_count, datetime.now() -start_time))
 		return full_tweets
 	except :
@@ -40,6 +41,7 @@ TweetIDs = file.read().split("\n")
 
 print("Looking for tweets")
 results = lookup_tweets(TweetIDs, api)
+print("Tweets retrieved: {}".format(len(results)))
 
 tweet_dict = dict()
 
@@ -47,5 +49,6 @@ for tweet in results:
 	if tweet:
 		tweet_dict[tweet.id_str] = tweet.text
 
+print("Saving dictionary: {}".format(len(tweet_dict.keys())))
 with open("./dataset/nepal/2015_Nepal_Earthquake_unlabelled.txt", "w") as f:
 	json.dump(tweet_dict, f)
