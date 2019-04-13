@@ -10,10 +10,11 @@ import gensim
 import pandas as pd
 import re
 import json
+import json
 
 dataset = "dataset/nepal/"
 
-train = dataset + "2015_Nepal_Earthquake_train.tsv"
+train = dataset + "train.csv"
 train_tweets = pd.read_csv(train, sep="\t", encoding="latin")
 
 unlabelled = dataset + "2015_Nepal_Earthquake_unlabelled.txt"
@@ -21,7 +22,7 @@ with open(unlabelled, 'r') as f:
 	unlabelled_tweets = json.load(f)
 
 tweets = dict()
-tag_to_tweet = dict()
+# tag_to_tweet = dict()
 tag_to_id = dict()
 
 def parsing(tweet):
@@ -73,7 +74,7 @@ class corpus(object):
 		self.dict = file
 	def __iter__(self):
 		for i, ID in enumerate(self.dict.keys()):
-			tag_to_tweet[i] = tweets[ID]
+			# tag_to_tweet[i] = tweets[ID]
 			tag_to_id[i] = ID
 			yield TaggedDocument(gensim.utils.simple_preprocess(tweets[ID]), tags=[i])
 
@@ -91,3 +92,6 @@ model.build_vocab(cor)
 print("train", model.epochs)
 model.train(cor, total_examples=model.corpus_count, epochs=model.epochs)
 model.save("tweet_doc2vec.model")
+
+with open("dataset/nepal/tag_to_id.txt","w") as f:
+	json.dump(tag_to_id, f)
